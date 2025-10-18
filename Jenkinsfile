@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<teammate-username>/<repo-name>.git'
+                git branch: 'main', url: 'https://github.com/Kaushik-Bommu/dark-switch.git'
             }
         }
 
