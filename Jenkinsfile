@@ -14,9 +14,15 @@ pipeline {
             }
         }
 
+        stage('Cleanup Previous Container') {
+            steps {
+                sh 'docker rm -f unity-webgl || true'
+            }
+        }
+
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 8080:8080 unity-platformer'
+                sh 'docker run -d -p 8080:8080 --name unity-webgl unity-platformer'
             }
         }
     }
