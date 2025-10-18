@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = "unity-platformer"
+        CONTAINER_NAME = "unity-webgl"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -8,22 +13,40 @@ pipeline {
             }
         }
 
-        stage('Build with Docker') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t unity-platformer .'
+                sh 'docker build --pull -t $DOCKER_IMAGE .'
             }
         }
 
-        stage('Cleanup Previous Container') {
+        stage('Stop Previous Container') {
             steps {
-                sh 'docker rm -f unity-webgl || true'
+                sh '''
+                if [ $(docker ps -q -f name=$CONTAINER_NAME) ]; then
+                    docker rm -f $CONTAINER_NAME
+                else
+                    echo "No existing container running"
+                fi
+                '''
             }
         }
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 8080:8080 --name unity-webgl unity-platformer'
+                sh 'docker run -d -p 8080:8080 --name $CONTAINER_NAME $DOCKER_IMAGE'
             }
+        }
+
+        stage('Post Build Info') {
+            steps {
+                echo "Game deployed at http://<Jenkins-Server-IP>:8080"
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo "Build or deployment failed! Check logs."
         }
     }
 }

@@ -1,22 +1,29 @@
-# Use a valid Linux Unity editor image from UnityCI
-FROM unityci/editor:ubuntu-2021.3.57f2-windows-mono-3.2.0
+# Stage 1: Build Unity WebGL
+FROM unityci/editor:ubuntu-2021.3.57f2-webgl-0.16.0 AS builder
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /workspace
 
-# Copy your Unity project into container
+# Copy Unity project into container
 COPY . .
 
-# Build Unity project for WebGL
+# Build WebGL project
 RUN /opt/unity-editor/Unity \
     -quit \
     -batchmode \
     -nographics \
     -projectPath /workspace \
-    -buildWebGLPlayer /workspace/Builds/WebGL
+    -buildWebGLPlayer /workspace/Builds/WebGL \
+    -logFile /workspace/unity_build.log
 
-# Expose port to view WebGL build
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+
+# Copy WebGL build from previous stage
+COPY --from=builder /workspace/Builds/WebGL /usr/share/nginx/html
+
+# Expose port
 EXPOSE 8080
 
-# Serve the WebGL build via Python HTTP server
-CMD ["python3", "-m", "http.server", "8080", "--directory", "/workspace/Builds/WebGL"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
