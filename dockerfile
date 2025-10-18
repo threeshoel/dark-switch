@@ -1,5 +1,5 @@
 # Use a valid Linux Unity editor image from UnityCI
-FROM unityci/editor:2022.3.0f1-linux-mono-0.17.2
+FROM unityci/editor:ubuntu-2021.3.57f2-windows-mono-3.2.0
 
 # Set working directory inside container
 WORKDIR /workspace
