@@ -24,7 +24,7 @@ RUN /opt/unity-editor/Unity \
     -quit \
     -batchmode \
     -nographics \
-    -projectPath /workspace/dark-switch\
+    -projectPath /workspace/dark-switch \
     -buildWebGLPlayer /workspace/dark-switch/Builds/WebGL \
     -logFile /workspace/unity_build.log
 
