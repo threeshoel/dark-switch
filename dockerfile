@@ -7,9 +7,7 @@ ARG UNITY_LICENSE_CONTENT
 
 # NEW: Activate the Unity license
 # This fails the build if the license (from Jenkins) is invalid
-RUN mkdir -p /root/.local/share/unity3d/Unity && \
-    echo "$UNITY_LICENSE_CONTENT" > /root/.local/share/unity3d/Unity/Unity_lic.ulf
-
+RUN mkdir -p /root/.local/share/unity3d/Unity && echo "$UNITY_LICENSE_CONTENT" > /root/.local/share/unity3d/Unity/Unity_lic.ulf 
 # Set the working directory inside the container
 WORKDIR /workspace
 
