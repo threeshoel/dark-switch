@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        UNITY_LICENSE_CONTENT = credentials('UNITY_LICENSE_CONTENT')
         DOCKER_IMAGE = "unity-platformer"
         CONTAINER_NAME = "unity-webgl"
     }
@@ -16,14 +15,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // FIXED: This 'withCredentials' block is NEW.
-                // It securely gets the 'UNITY_LICENSE_CONTENT' secret from Jenkins
-                // and passes it to the Dockerfile as a --build-arg.
+                // This is the correct, secure way to pass the license
                 withCredentials([string(credentialsId: 'UNITY_LICENSE_CONTENT', variable: 'UNITY_LICENSE')]) {
                     sh 'docker build --pull -t $DOCKER_IMAGE --build-arg UNITY_LICENSE_CONTENT="$UNITY_LICENSE" .'
                 }
             }
         }
+
         stage('Stop Previous Container') {
             steps {
                 sh '''
@@ -38,13 +36,14 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 8080:8080 --name $CONTAINER_NAME $DOCKER_IMAGE'
+                // FIXED: The port is now 8080 (your server) -> 80 (the container)
+                sh 'docker run -d -p 8080:80 --name $CONTAINER_NAME $DOCKER_IMAGE'
             }
         }
 
         stage('Post Build Info') {
             steps {
-                echo "Game deployed at http://<Jenkins-Server-IP>:8080"
+                echo "Game deployed! Access it at http://<Your-Jenkins-Server-IP>:8080"
             }
         }
     }
