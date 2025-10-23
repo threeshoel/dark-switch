@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        UNITY_LICENSE_CONTENT = credentials('UNITY_LICENSE_CONTENT')
         DOCKER_IMAGE = "unity-platformer"
         CONTAINER_NAME = "unity-webgl"
     }
