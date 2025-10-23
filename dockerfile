@@ -3,11 +3,10 @@
 FROM unityci/editor:ubuntu-2022.3.26f1-linux-il2cpp-3.2.0 AS builder
 
 # NEW: Accept the license content as a build argument from Jenkins
-ARG UNITY_LICENSE_CONTENT1
+ARG UNITY_LICENSE_CONTENT
 
 # NEW: Activate the Unity license
-# This fails the build if the license (from Jenkins) is invalid
-RUN mkdir -p /root/.local/share/unity3d/Unity && echo "$UNITY_LICENSE_CONTENT1" > /root/.local/share/unity3d/Unity/Unity_lic.ulf 
+RUN mkdir -p /root/.local/share/unity3d/Unity && echo "$UNITY_LICENSE_CONTENT" > /root/.local/share/unity3d/Unity/Unity_lic.ulf
 # Set the working directory inside the container
 WORKDIR /workspace
 

@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        UNITY_LICENSE_CONTENT1 = credentials('UNITY_LICENSE_CONTENT1')
+        UNITY_LICENSE_CONTENT = credentials('UNITY_LICENSE_CONTENT')
         DOCKER_IMAGE = "unity-platformer"
         CONTAINER_NAME = "unity-webgl"
     }
@@ -17,10 +17,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 // FIXED: This 'withCredentials' block is NEW.
-                // It securely gets the 'UNITY_LICENSE_CONTENT1' secret from Jenkins
+                // It securely gets the 'UNITY_LICENSE_CONTENT' secret from Jenkins
                 // and passes it to the Dockerfile as a --build-arg.
-                withCredentials([string(credentialsId: 'UNITY_LICENSE_CONTENT1', variable: 'UNITY_LICENSE')]) {
-                    sh 'docker build --pull -t $DOCKER_IMAGE --build-arg UNITY_LICENSE_CONTENT1="$UNITY_LICENSE" .'
+                withCredentials([string(credentialsId: 'UNITY_LICENSE_CONTENT', variable: 'UNITY_LICENSE')]) {
+                    sh 'docker build --pull -t $DOCKER_IMAGE --build-arg UNITY_LICENSE_CONTENT="$UNITY_LICENSE" .'
                 }
             }
         }
