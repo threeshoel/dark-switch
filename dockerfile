@@ -19,7 +19,7 @@ COPY . .
 # Replace 'YOUR_PROJECT_FOLDER' with the real folder name
 # (e.g., 'dark-switch-game', or whatever contains Assets/)
 RUN unity-editor \
-    -projectPath /workspace/dark-switch \
+    -projectPath /workspace\
     -buildTarget WebGL \
     -quit -batchmode -nographics \
     -logFile /workspace/unity_build.log
@@ -31,7 +31,7 @@ FROM nginx:alpine
 
 # Copy the *build output* (from Stage 1) into the web server's public folder
 # YOU MUST ALSO FIX 'YOUR_PROJECT_FOLDER' HERE:
-COPY --from=builder /workspace/dark-switch/Builds/WebGL /usr/share/nginx/html
+COPY --from=builder /workspace/Builds/WebGL /usr/share/nginx/html
 
 # Tell Docker that the container will listen on port 80 (Nginx's default)
 EXPOSE 80
