@@ -22,7 +22,8 @@ RUN unity-editor \
     -projectPath /workspace/dark-switch\
     -buildTarget WebGL \
     -quit -batchmode -nographics \
-    -logFile /workspace/unity_build.log
+    -logFile /workspace/unity_build.log\
+    || (cat /workspace/unity_build.log && exit 1)
 
 
 # ---
