@@ -18,7 +18,12 @@ COPY . .
 # THIS IS THE COMMAND YOU MUST FIX:
 # Replace 'YOUR_PROJECT_FOLDER' with the real folder name
 # (e.g., 'dark-switch-game', or whatever contains Assets/)
-RUN /opt/unity-editor/Unity -quit -batchmode -nographics -projectPath /workspace/dark-switch -buildWebGLPlayer /workspace/dark-switch/Builds/WebGL -logFile /workspace/unity_build.log
+RUN unity-editor \
+    -projectPath /workspace/dark-switch \
+    -buildTarget WebGL \
+    -quit -batchmode -nographics \
+    -logFile /workspace/unity_build.log
+
 
 # ---
 # Stage 2: Serve the game with a lightweight web server
